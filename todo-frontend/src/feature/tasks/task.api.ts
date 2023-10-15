@@ -7,3 +7,17 @@ export function createTask({content}: CreateTaskDto){
         content,
     })
 }
+
+export function fetchTasks({page, limit}: {page:number, limit:number}){
+    return api.get(`task?page=${page}&limit=${limit}`)
+}
+
+export function deleteTask(id:number){
+    return api.delete(`task/${id}`)
+}
+
+export function checkTask(id:number,done:boolean){
+    return api.patch(`task/${id}`, {
+        done
+    })
+}
