@@ -3,9 +3,10 @@ import { CreateTaskDto } from '../dto/create-task.dto';
 import { Task } from '../entities/task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TaskService } from '../task.service';
 
 @Injectable()
-export class TaskDbService {
+export class TaskDbService implements TaskService {
   constructor(
     @InjectRepository(Task)
     private readonly taskRepository: Repository<Task>,
@@ -21,9 +22,10 @@ export class TaskDbService {
     return this.taskRepository.save(createTask);
   }
 
-  // findAll() {
-  //   return `This action returns all task`;
-  // }
+  findAll(page: number, limit: number): Promise<Task[]> {
+    const skip = (page - 1) * limit;
+    return this.taskRepository.find({ skip, take: limit });
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} task`;
