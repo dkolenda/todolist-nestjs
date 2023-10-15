@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { Task } from '../entities/task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -35,7 +35,10 @@ export class TaskDbService implements TaskService {
   //   return `This action updates a #${id} task`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} task`;
-  // }
+  async remove(id: number) {
+    const result = await this.taskRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('Not found task');
+    }
+  }
 }

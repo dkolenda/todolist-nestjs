@@ -7,11 +7,14 @@ import {
   ValidationPipe,
   Res,
   HttpStatus,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksDto } from './dto/get-tasks.dto';
 import { Response } from 'express';
+import { DeleteTaskDto } from './dto/delete-task.dto';
 
 @Controller('task')
 export class TaskController {
@@ -45,8 +48,8 @@ export class TaskController {
   //   return this.taskService.update(+id, updateTaskDto);
   // }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.taskService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param(new ValidationPipe()) params: DeleteTaskDto) {
+    return this.taskService.remove(params.id);
+  }
 }
