@@ -9,12 +9,14 @@ import {
   HttpStatus,
   Delete,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksDto } from './dto/get-tasks.dto';
 import { Response } from 'express';
-import { DeleteTaskDto } from './dto/delete-task.dto';
+import { ParamTaskDto } from './dto/param-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Controller('task')
 export class TaskController {
@@ -43,13 +45,16 @@ export class TaskController {
       });
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-  //   return this.taskService.update(+id, updateTaskDto);
-  // }
+  @Patch(':id')
+  update(
+    @Param(new ValidationPipe()) params: ParamTaskDto,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ) {
+    return this.taskService.update(params.id, updateTaskDto);
+  }
 
   @Delete(':id')
-  remove(@Param(new ValidationPipe()) params: DeleteTaskDto) {
+  remove(@Param(new ValidationPipe()) params: ParamTaskDto) {
     return this.taskService.remove(params.id);
   }
 }
